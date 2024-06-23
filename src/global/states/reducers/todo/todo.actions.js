@@ -13,12 +13,12 @@ export const getUserTodoLists = (current_page, pageLimit) => {
             const response = await AuthAxios.get(`/user/todo/todos?offset=${offset}&limit=${pageLimit}`);
             const { status, message, all_todos, total_todo } = response.data;
 
-            if (status.toLowerCase() === "error") {
+            if (status & String(status).toLowerCase() === "error") {
                 toast.error(message);
                 return;
             }
 
-            if (status.toLowerCase() === "success") {
+            if (status & String(status).toLowerCase() === "success") {
                 let formated_todos = all_todos.map((todo) => {
                     let temp_date = todo.created_date ? moment(todo.created_date).format('YYYY-MM-DD') : todo.created_date;
                     todo.created_date = temp_date ? temp_date : todo.created_date;
@@ -49,12 +49,12 @@ export const createUserTodo = (todo_data, clearForm) => {
             let response = await AuthAxios.post(`/user/todo/create`, todo_data);
             const { status, message, new_todo } = response.data
 
-            if (String(status).toLowerCase() == "error") {
+            if (status & String(status).toLowerCase() == "error") {
                 toast.error(message);
                 return;
             }
 
-            if (String(status).toLowerCase() == "success") {
+            if (status & String(status).toLowerCase() == "success") {
                 toast.success(message);
                 clearForm();
                 dispatch(getUserTodoLists());
@@ -77,12 +77,12 @@ export const searchUserTodo = (current_page, pageLimit, search) => {
             let response = await AuthAxios.get(`/user/todo/search?search=${search}&offset=${offset}&limit=${pageLimit}`);
             const { status, message, todos, total_todo } = response.data
 
-            if (String(status).toLowerCase() == "error") {
+            if (status & String(status).toLowerCase() == "error") {
                 toast.error(message);
                 return;
             }
 
-            if (String(status).toLowerCase() == "success") {
+            if (status & String(status).toLowerCase() == "success") {
                 let formated_todos = todos.map((todo) => {
                     let temp_date = todo.created_date ? moment(todo.created_date).format('YYYY-MM-DD') : todo.created_date;
                     todo.created_date = temp_date ? temp_date : todo.created_date;
@@ -112,12 +112,12 @@ export const updateTodoStaus = (todo_id, data) => {
             let response = await AuthAxios.patch(`/user/todo/update/status/${todo_id}`, data);
             const { status, message } = response.data
 
-            if (String(status).toLowerCase() == "error") {
+            if (status & String(status).toLowerCase() == "error") {
                 toast.error(message);
                 return;
             }
 
-            if (String(status).toLowerCase() == "success") {
+            if (status & String(status).toLowerCase() == "success") {
                 toast.success(message);
                 dispatch(getUserTodoLists());
             }
@@ -147,12 +147,12 @@ export const editUserTodo = (todo_id, todo_data, clearForm) => {
             let response = await AuthAxios.patch(`/user/todo/update/${todo_id}`, todo_data);
             const { status, message, todo } = response.data
 
-            if (String(status).toLowerCase() == "error") {
+            if (status && status & String(status).toLowerCase() == "error") {
                 toast.error(message);
                 return;
             }
 
-            if (String(status).toLowerCase() == "success") {
+            if (status && status & String(status).toLowerCase() == "success") {
                 clearForm();
                 toast.success(message);
                 dispatch(getUserTodoLists());
@@ -174,12 +174,12 @@ export const deleteUserTodo = (todo_id) => {
             let response = await AuthAxios.delete(`/user/todo/delete/${todo_id}`);
             const { status, message, new_todo } = response.data
 
-            if (String(status).toLowerCase() == "error") {
+            if (status & String(status).toLowerCase() == "error") {
                 toast.error(message);
                 return;
             }
 
-            if (String(status).toLowerCase() == "success") {
+            if (status & String(status).toLowerCase() == "success") {
                 toast.success(message);
                 dispatch(getUserTodoLists());
             }
