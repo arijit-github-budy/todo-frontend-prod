@@ -24,7 +24,6 @@ export const getUserTodoLists = (current_page, pageLimit) => {
                     todo.created_date = temp_date ? temp_date : todo.created_date;
                     return todo
                 })
-                console.log(formated_todos)
                 dispatch({
                     type: TODO_LISTS,
                     payload: {
@@ -47,6 +46,7 @@ export const getUserTodoLists = (current_page, pageLimit) => {
 export const createUserTodo = (todo_data, clearForm) => {
     return async (dispatch, getState) => {
         try {
+            const { todo_limit } = getState().todo;
             let response = await AuthAxios.post(`/user/todo/create`, todo_data);
             const { status, message, new_todo } = response.data
 
@@ -58,7 +58,7 @@ export const createUserTodo = (todo_data, clearForm) => {
             if (status && String(status).toLowerCase() == "success") {
                 toast.success(message);
                 clearForm();
-                dispatch(getUserTodoLists());
+                dispatch(getUserTodoLists(0,todo_limit));
             }
 
         } catch (error) {
@@ -110,6 +110,7 @@ export const searchUserTodo = (current_page, pageLimit, search) => {
 export const updateTodoStaus = (todo_id, data) => {
     return async (dispatch, getState) => {
         try {
+            const { todo_limit } = getState().todo;
             let response = await AuthAxios.patch(`/user/todo/update/status/${todo_id}`, data);
             const { status, message } = response.data
 
@@ -120,7 +121,7 @@ export const updateTodoStaus = (todo_id, data) => {
 
             if (status && String(status).toLowerCase() == "success") {
                 toast.success(message);
-                dispatch(getUserTodoLists());
+                dispatch(getUserTodoLists(0, todo_limit));
             }
 
         } catch (error) {
@@ -145,6 +146,7 @@ export const getTodoForEdit = (edit_todo, todo_action) => {
 export const editUserTodo = (todo_id, todo_data, clearForm) => {
     return async (dispatch, getState) => {
         try {
+            const { todo_limit } = getState().todo;
             let response = await AuthAxios.patch(`/user/todo/update/${todo_id}`, todo_data);
             const { status, message, todo } = response.data
 
@@ -156,7 +158,7 @@ export const editUserTodo = (todo_id, todo_data, clearForm) => {
             if (status && status && String(status).toLowerCase() == "success") {
                 clearForm();
                 toast.success(message);
-                dispatch(getUserTodoLists());
+                dispatch(getUserTodoLists(0, todo_limit));
                 setTimeout(() => {
                     dispatch(getTodoForEdit({}, ''));
                 }, 800)
@@ -172,6 +174,7 @@ export const editUserTodo = (todo_id, todo_data, clearForm) => {
 export const deleteUserTodo = (todo_id) => {
     return async (dispatch, getState) => {
         try {
+            const { todo_limit } = getState().todo;
             let response = await AuthAxios.delete(`/user/todo/delete/${todo_id}`);
             const { status, message, new_todo } = response.data
 
@@ -182,7 +185,7 @@ export const deleteUserTodo = (todo_id) => {
 
             if (status && String(status).toLowerCase() == "success") {
                 toast.success(message);
-                dispatch(getUserTodoLists());
+                dispatch(getUserTodoLists(0, todo_limit));
             }
 
         } catch (error) {
