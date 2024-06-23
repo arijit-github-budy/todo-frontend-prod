@@ -3,49 +3,6 @@ import { TODO_LISTS, SET_EDIT_TODO } from './todo.types';
 import { toast } from 'react-toastify';
 import moment  from 'moment';
 
-// export const getUserTodoLists = (current_page, pageLimit=0) => {
-//     return async (dispatch, getState) => {
-//         try {
-//             let { todo_current_page, todo_limit } = await getState().todo;
-//             todo_current_page = current_page ? current_page : todo_current_page;
-//             if(pageLimit){
-//                 todo_current_page = current_page
-//                 todo_limit = pageLimit ? pageLimit : todo_limit;
-//                 console.log(todo_current_page, todo_limit)
-//             }
-
-//             const lastTodo = todo_current_page * todo_limit;
-//             const firstTodo = lastTodo - todo_limit;
-
-//             // console.log("fina count", firstTodo, todo_limit)
-
-//             let response = await AuthAxios.get(`/user/todo/todos?offset=${firstTodo}&limit=${todo_limit}`);
-//             const { status, message, all_todos, total_todo } = response.data
-
-//             if (String(status).toLowerCase() == "error") {
-//                 toast.error(message);
-//                 return;
-//             }
-
-//             if (String(status).toLowerCase() == "success") {
-//                 dispatch({
-//                     type: TODO_LISTS,
-//                     payload: {
-//                         all_todos,
-//                         total_todo,
-//                         lastTodo,
-//                         todo_limit
-//                     }
-//                 })
-//             }
-
-//         } catch (error) {
-//             console.log("Error came from fetching user todo", error);
-//             toast.error("Failed to fetch todos. Please try again.")
-//         }
-//     }
-// }
-
 export const getUserTodoLists = (current_page, pageLimit) => {
     return async (dispatch, getState) => {
         try {
@@ -126,15 +83,20 @@ export const searchUserTodo = (current_page, pageLimit, search) => {
             }
 
             if (String(status).toLowerCase() == "success") {
+                let formated_todos = todos.map((todo) => {
+                    let temp_date = todo.created_date ? moment(todo.created_date).format('YYYY-MM-DD') : todo.created_date;
+                    todo.created_date = temp_date ? temp_date : todo.created_date;
+                    return todo
+                })
                 dispatch({
                     type: TODO_LISTS,
                     payload: {
-                        all_todos: todos,
+                        all_todos: formated_todos,
                         total_todo,
                         lastTodo: currentPage,
                         todo_limit: pageLimit
                     }
-                })
+                });
             }
 
         } catch (error) {
