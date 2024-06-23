@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, Pencil, Trash2, CircleCheck } from 'lucide-react';
-import styles from './TodoTable.module.css'; // Import TodoTable module CSS
+import styles from './todoTable.module.css'; // Import TodoTable module CSS
 import { toast } from 'react-toastify';
 import * as actions from '../../global/states/reducers/todo/todo.actions.js';
 
