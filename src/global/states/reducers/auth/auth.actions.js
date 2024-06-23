@@ -42,7 +42,7 @@ export const userLogin = (data, clearFormData) => {
             }
 
             if (status && String(status).toLowerCase() == "success") {
-                toast.succes(message);
+                toast.success(message);
                 dispatch({
                     type: LOGIN,
                     payload: user_info
