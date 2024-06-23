@@ -1,0 +1,17 @@
+# Dependency directories
+node_modules/
+
+package-lock.json
+
+yarn.lock
+
+# Client environment variables
+.env
+
+# Environment-specific files (if applicable)
+.env.local
+.env.production
+.env.test
+
+# Log files
+*.log
