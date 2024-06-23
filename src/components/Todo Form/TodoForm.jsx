@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styles from './TodoForm.module.css'; // Import CSS module
+import styles from './todoForm.module.css'; // Import CSS module
 import { toast } from 'react-toastify';
 import * as actions from '../../global/states/reducers/todo/todo.actions.js';
 
