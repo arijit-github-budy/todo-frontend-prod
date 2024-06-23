@@ -92,88 +92,104 @@ const TodoTable = () => {
 
     return (
         <div className={styles.todoTable}>
-            {/* Search input */}
-            <div className={styles.searchContainer}>
-                <input
-                    type="text"
-                    placeholder="Search Todos"
-                    value={searchTerm}
-                    onChange={(e) => handleSearchInput(e)}
-                    className={styles.searchInput}
-                />
-                <button className={styles.searchButton} type='button' onClick={(e) => handleSearch(e)} disabled={!searchTerm}>Search</button>
-            </div>
-
-            {/* Todo table */}
-            <table className={styles.table}>
-                <thead>
-                    <tr>
-                        <th style={{ width: "252px" }}>Title</th>
-                        <th>Description</th>
-                        <th style={{ width: "120px" }}>Date</th>
-                        <th style={{ width: "120px" }}>Status</th>
-                        <th style={{ width: "205px" }}>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {all_todos.map(todo => (
-                        <tr key={todo.todo_id}>
-                            <td>
-                                <Link className={styles.titleLink} to={`/auth/user/todo/${todo.todo_id}`}>
-                                    {todo.title}
-                                </Link>
-                            </td>
-                            <td>{todo.description && todo.description.length > 20 ? `${todo.description.slice(0, 100)}...` : todo.description}</td>
-                            <td>
-                                {todo.created_date}
-                            </td>
-                            <td>
-                                <div className={`${styles.todoStatus} ${String(todo.status).toLowerCase() === 'completed' ? styles.todoCompleteColor : styles.todoPendingColor}`}>
-                                    {todo.status}
-                                </div>
-                            </td>
-                            <td>
-                                <div className={String(todo.status).toLowerCase() === 'completed' ? styles.tableActionViewIcons : styles.tableActionIcons}>
-                                    {String(todo.status).toLowerCase() === 'completed' ?
-                                        <>
-                                            <span className={`${styles.icon} ${styles.eye}`} onClick={() => handleViewTodo(todo.todo_id)}>
-                                                <Eye />
-                                            </span>
-                                            <span className={`${styles.icon} ${styles.trash}`} onClick={() => handleDeleteTodo(todo.todo_id)}>
-                                                <Trash2 />
-                                            </span>
-                                        </>
-                                        :
-                                        <>
-                                            <span className={`${styles.icon} ${styles.circle}`} onClick={() => handleTodoStatus(todo.todo_id)}>
-                                                <CircleCheck />
-                                            </span>
-                                            <span className={`${styles.icon} ${styles.eye}`} onClick={() => handleViewTodo(todo.todo_id)}>
-                                                <Eye />
-                                            </span>
-                                            <span className={`${styles.icon} ${styles.pencil}`} onClick={() => handleEditTodo(todo)}>
-                                                <Pencil />
-                                            </span>
-                                            <span className={`${styles.icon} ${styles.trash}`} onClick={() => handleDeleteTodo(todo.todo_id)}>
-                                                <Trash2 />
-                                            </span>
-                                        </>
-                                    }
-                                </div>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-
-            {/* Pagination */}
-            {all_todos.length > 0 &&
-                <div className={styles.pagination}>
-                    <div className={styles.pageActions}>
-                        <button onClick={handlePreviousPage}>Previous</button>
-                        <button onClick={handleNextPage}>Next</button>
+            {
+                all_todos && all_todos.length > 0 &&
+                (
+                    <div className={styles.searchContainer}>
+                        <input
+                            type="text"
+                            placeholder="Search Todos"
+                            value={searchTerm}
+                            onChange={(e) => handleSearchInput(e)}
+                            className={styles.searchInput}
+                        />
+                        <button className={styles.searchButton} type='button' onClick={(e) => handleSearch(e)} disabled={!searchTerm}>Search</button>
                     </div>
-                </div>
+                )
+            }
+
+            {
+                all_todos && all_todos.length > 0 ?
+                (
+                    <>
+                        {/* Todo table */}
+                        <table className={styles.table}>
+                            <thead>
+                                <tr>
+                                    <th style={{ width: "252px" }}>Title</th>
+                                    <th>Description</th>
+                                    <th style={{ width: "120px" }}>Date</th>
+                                    <th style={{ width: "120px" }}>Status</th>
+                                    <th style={{ width: "205px" }}>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {all_todos.map(todo => (
+                                    <tr key={todo.todo_id}>
+                                        <td>
+                                            <Link className={styles.titleLink} to={`/auth/user/todo/${todo.todo_id}`}>
+                                                {todo.title}
+                                            </Link>
+                                        </td>
+                                        <td>{todo.description && todo.description.length > 20 ? `${todo.description.slice(0, 100)}...` : todo.description}</td>
+                                        <td>
+                                            {todo.created_date}
+                                        </td>
+                                        <td>
+                                            <div className={`${styles.todoStatus} ${String(todo.status).toLowerCase() === 'completed' ? styles.todoCompleteColor : styles.todoPendingColor}`}>
+                                                {todo.status}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className={String(todo.status).toLowerCase() === 'completed' ? styles.tableActionViewIcons : styles.tableActionIcons}>
+                                                {String(todo.status).toLowerCase() === 'completed' ?
+                                                    <>
+                                                        <span className={`${styles.icon} ${styles.eye}`} onClick={() => handleViewTodo(todo.todo_id)}>
+                                                            <Eye />
+                                                        </span>
+                                                        <span className={`${styles.icon} ${styles.trash}`} onClick={() => handleDeleteTodo(todo.todo_id)}>
+                                                            <Trash2 />
+                                                        </span>
+                                                    </>
+                                                    :
+                                                    <>
+                                                        <span className={`${styles.icon} ${styles.circle}`} onClick={() => handleTodoStatus(todo.todo_id)}>
+                                                            <CircleCheck />
+                                                        </span>
+                                                        <span className={`${styles.icon} ${styles.eye}`} onClick={() => handleViewTodo(todo.todo_id)}>
+                                                            <Eye />
+                                                        </span>
+                                                        <span className={`${styles.icon} ${styles.pencil}`} onClick={() => handleEditTodo(todo)}>
+                                                            <Pencil />
+                                                        </span>
+                                                        <span className={`${styles.icon} ${styles.trash}`} onClick={() => handleDeleteTodo(todo.todo_id)}>
+                                                            <Trash2 />
+                                                        </span>
+                                                    </>
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+
+                        {/* Pagination */}
+                        {all_todos.length > 0 &&
+                            <div className={styles.pagination}>
+                                <div className={styles.pageActions}>
+                                    <button onClick={handlePreviousPage}>Previous</button>
+                                    <button onClick={handleNextPage}>Next</button>
+                                </div>
+                            </div>
+                        }
+                    </>
+                ) :
+                (
+                    <h1 style={{
+                        textAlign: 'center',
+                    }}>No todo found</h1>
+                )
             }
         </div>
     );
