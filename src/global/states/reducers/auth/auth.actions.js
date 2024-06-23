@@ -8,17 +8,20 @@ export const userRegistration = (data, clearFormData) => {
             let response = await AuthAxios.post(`/auth/register`, data);
             const { status, message, new_user } = response.data
 
-            if (String(status).toLowerCase() == "error") {
+            if (status && String(status).toLowerCase() == "error") {
                 toast.error(message);
                 return;
             }
 
-            dispatch({
-                type: REGISTRATION,
-                payload: new_user
-            })
+            if (status && String(status).toLowerCase() == "success") {
+                toast.success(message);
+                dispatch({
+                    type: REGISTRATION,
+                    payload: new_user
+                })
+                clearFormData();
+            }
 
-            clearFormData();
 
         } catch (error) {
             console.log("Error came from create user", error);
@@ -33,21 +36,25 @@ export const userLogin = (data, clearFormData) => {
             let response = await AuthAxios.post(`/auth/login`, data);
             const { status, message, token, user_info } = response.data
 
-            if (String(status).toLowerCase() == "error") {
+            if (status && String(status).toLowerCase() == "error") {
                 toast.error(message);
                 return;
             }
 
-            dispatch({
-                type: LOGIN,
-                payload: user_info
-            });
+            if (status && String(status).toLowerCase() == "success") {
+                toast.succes(message);
+                dispatch({
+                    type: LOGIN,
+                    payload: user_info
+                });
+                localStorage.setItem('access_token', token);
+                localStorage.setItem('user_email', user_info.email);
+                localStorage.setItem('user_fullname', user_info.fullname);
+    
+                clearFormData();
+            }
 
-            localStorage.setItem('access_token', token);
-            localStorage.setItem('user_email', user_info.email);
-            localStorage.setItem('user_fullname', user_info.fullname);
 
-            clearFormData();
 
         } catch (error) {
             console.log("Error came from login user", error);
@@ -62,28 +69,30 @@ export const userLogout = (redirection) => {
             let response = await AuthAxios.post(`/auth/logout`);
             const { status, message, user_info } = response.data
 
-            if (String(status).toLowerCase() == "error") {
+            if (status && String(status).toLowerCase() == "error") {
                 toast.error(message);
                 return;
             }
 
-            dispatch({
-                type: LOGOUT,
-                payload: user_info
-            });
-
-            if(!user_info || user_info.login_status){
-                toast.error("User logout failed. Try again later.");
-                return;
+            if (status && String(status).toLowerCase() == "success") {
+                dispatch({
+                    type: LOGOUT,
+                    payload: user_info
+                });
+    
+                if (!user_info || user_info.login_status) {
+                    toast.error("User logout failed. Try again later.");
+                    return;
+                }
+    
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user_email');
+                localStorage.removeItem('user_fullname');
+    
+                toast.success(message)
+    
+                redirection();
             }
-
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('user_email');
-            localStorage.removeItem('user_fullname');
-
-            toast.success(message)
-
-            redirection();
 
         } catch (error) {
             console.log("Error came from logout user", error);
@@ -98,12 +107,12 @@ export const userContact = (request_data, clearFormData) => {
             let response = await AuthAxios.post(`/auth/contact`, request_data);
             const { status, message, new_todo } = response.data
 
-            if (String(status).toLowerCase() == "error") {
+            if (status && String(status).toLowerCase() == "error") {
                 toast.error(message);
                 return;
             }
 
-            if (String(status).toLowerCase() == "success") {
+            if (status && String(status).toLowerCase() == "success") {
                 toast.success(message);
                 clearFormData();
             }
