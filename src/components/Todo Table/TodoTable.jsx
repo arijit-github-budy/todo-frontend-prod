@@ -41,7 +41,7 @@ const TodoTable = () => {
         e.preventDefault();
         if (!e.target.value) {
             setSearchTerm('');
-            dispatch(actions.getUserTodoLists());
+            dispatch(actions.getUserTodoLists(0, todo_limit));
             return;
         }
         setSearchTerm(e.target.value);
